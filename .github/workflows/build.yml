@@ -1,0 +1,30 @@
+name: build-walle
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install platformio
+      # Change this URL to YOUR fork after you edit the pins
+      - run: git clone --depth 1 https://github.com/coloz/xiaozhi-library lib/xiaozhi-library
+      - name: English language + sounds
+        run: |
+          cd lib/xiaozhi-library
+          python scripts/generate_lang_config.py --language en-US --output src/assets/lang_config.h
+          python scripts/generate_sound_data.py --language en-US --output src/assets/sound_data.h
+      - run: pio run
+      - name: Merge into ONE file (flash at address 0x0)
+        run: |
+          pip install esptool
+          B=$(find ~/.platformio -name boot_app0.bin | head -1)
+          cd .pio/build/n16r8
+          python -m esptool --chip esp32s3 merge_bin -o walle_full.bin --flash_mode dio --flash_size 16MB 0x0 bootloader.bin 0x8000 partitions.bin 0xe000 "$B" 0x10000 firmware.bin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: walle-firmware
+          path: |
+            .pio/build/n16r8/walle_full.bin
