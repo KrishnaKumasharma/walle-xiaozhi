@@ -2,10 +2,10 @@
 #include <Xiaozhi.h>
 
 // Motor pins
-#define M1_A 41
-#define M1_B 47
-#define M2_A 43
-#define M2_B 44
+#define M1_A 47
+#define M1_B 43
+#define M2_A 44
+#define M2_B 45
 
 void motorLeft(int d)  { digitalWrite(M1_A, d > 0); digitalWrite(M1_B, d < 0); }
 void motorRight(int d) { digitalWrite(M2_A, d > 0); digitalWrite(M2_B, d < 0); }
