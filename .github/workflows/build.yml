@@ -10,7 +10,7 @@ jobs:
           python-version: '3.11'
       - run: pip install platformio
       # Change this URL to YOUR fork after you edit the pins
-      - run: git clone --depth 1 https://github.com/coloz/xiaozhi-library lib/xiaozhi-library
+      - run: git clone --depth 1 https://github.com/KrishnaKumasharma/xiaozhi-library lib/xiaozhi-library
       - name: English language + sounds
         run: |
           cd lib/xiaozhi-library
